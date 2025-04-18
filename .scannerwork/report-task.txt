@@ -1,0 +1,6 @@
+projectKey=unitest-basma
+serverUrl=http://localhost:8080
+serverVersion=25.4.0.105899
+dashboardUrl=http://localhost:8080/dashboard?id=unitest-basma
+ceTaskId=54ce3783-cf84-4bcb-b908-7d1f4e3fdf49
+ceTaskUrl=http://localhost:8080/api/ce/task?id=54ce3783-cf84-4bcb-b908-7d1f4e3fdf49

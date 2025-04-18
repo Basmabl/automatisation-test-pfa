@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prédiction des visiteurs</title>
+</head>
+<body>
+    <h1>Prédiction du nombre de visiteurs</h1>
+    <form method="POST">
+        <label for="heure">Entrez l'heure (0-23) :</label>
+        <input type="number" id="heure" name="heure" required>
+        <br><br>
+        <label for="temperature">Entrez la température :</label>
+        <input type="number" id="temperature" name="temperature" required>
+        <br><br>
+        <input type="submit" value="Prédire">
+    </form>
+
+    {% if prediction %}
+    <h2>📊 Résultat de la prédiction : {{ prediction }}</h2>
+    {% endif %}
+</body>
+</html>
