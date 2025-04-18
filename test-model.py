@@ -1,8 +1,15 @@
+# test_model.py
+
 import pytest
-from train import predict_visitors  # Import your function
+from app import predict_visitors  # Importation directe de la fonction depuis app.py
+from unittest.mock import patch
 
 def test_predict_visitors():
-    result = predict_visitors(12, 20) 
-    print(f"Prédiction du modèle : {result}")  # Noon, 20°C
-     
-    assert result > 30 and result < 60  # Expected visitors around 50
+    # Simulation des entrées utilisateur
+    with patch('builtins.input', side_effect=[12, 20]):  # Simule '12' pour l'heure et '20' pour la température
+        time = float(input())  # Simule l'entrée de l'heure
+        weather = float(input())  # Simule l'entrée de la température
+        result = predict_visitors(time, weather)  # Appel de la fonction de prédiction
+        print(f"Prédiction du modèle : {result}")
+        assert result > 30 and result < 60  # Vérifie que la prédiction est dans l'intervalle attendu
+
