@@ -21,14 +21,17 @@ jobs:
 
     - name:  Install dependencies
       run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-        pip install pytest selenium
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest selenium
+          python --version  # Affiche la version de Python
+          pip freeze         # Affiche les dépendances installées
+      
 
     - name:  Install geckodriver
+      if: always()  # Cela garantit que cette étape sera toujours exécutée
       run: |
-          GECKODRIVER_VERSION=$(curl -sSL https://github.com/mozilla/geckodriver/releases/latest | sed 's/.*\/tag\/v\([^"]*\).*/\1/')
-          echo "Installing geckodriver version $GECKODRIVER_VERSION"
+          GECKODRIVER_VERSION=$(curl -sSL https://github.com/mozilla/geckodriver/releases/latest | sed 's/.*tag\/v\([^"]*\).*/\1/')
           curl -sSL https://github.com/mozilla/geckodriver/releases/download/v$GECKODRIVER_VERSION/geckodriver-v$GECKODRIVER_VERSION-linux64.tar.gz -o geckodriver.tar.gz
           tar -xvzf geckodriver.tar.gz
           sudo mv geckodriver /usr/local/bin/
