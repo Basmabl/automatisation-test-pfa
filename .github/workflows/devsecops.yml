@@ -57,4 +57,4 @@ jobs:
         projectBaseDir: .
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        SONAR_HOST_URL: http://localhost:9000  # À adapter si SonarQube est hébergé ailleurs
+        SONAR_HOST_URL: http://localhost:8080  # À adapter si SonarQube est hébergé ailleurs
