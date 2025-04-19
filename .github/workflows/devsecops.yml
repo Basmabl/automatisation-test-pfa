@@ -55,7 +55,7 @@ jobs:
       run: pytest test-model.py
 
     - name:  Run Selenium tests
-      run: pytest test_selenium.py
+      run:   python -m pytest test_selenium.py -v
 
     - name:  Build Docker image
       run: docker build -t basmaboulli/unitest-basma:latest .
