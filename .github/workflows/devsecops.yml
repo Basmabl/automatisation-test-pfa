@@ -10,7 +10,7 @@ jobs:
   devsecops-pipeline:
     runs-on: ubuntu-latest
     env:
-          SONAR_HOST_URL: http://localhost:8080/  # Ou votre URL serveur
+          SONAR_HOST_URL: http://localhost:9000/  # Ou votre URL serveur
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
     steps:
