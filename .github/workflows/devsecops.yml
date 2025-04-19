@@ -28,25 +28,28 @@ jobs:
           pip freeze         # Affiche les dépendances installées
       
 
-    - name: 🧪 Install Chrome and ChromeDriver
+    - name: 🧪 Install Chrome and ChromeDriver (Compatible Versions)
       run: |
             sudo apt update
             sudo apt install -y wget unzip xvfb
             
-            # Install specific Chrome version that matches your ChromeDriver
+            # Install Chrome
             wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
             sudo apt install -y ./google-chrome-stable_current_amd64.deb
             
-            # Get installed Chrome version
-            CHROME_VERSION=$(google-chrome --version | awk '{print $3}' | cut -d'.' -f1)
+            # Get Chrome major version (e.g. "135" from "135.0.7049.95")
+            CHROME_MAJOR_VERSION=$(google-chrome --version | awk '{print $3}' | cut -d'.' -f1)
             
-            # Download corresponding ChromeDriver version
-            wget https://chromedriver.storage.googleapis.com/LATEST_RELEASE_${CHROME_VERSION} -O chromedriver_version.txt
-            CHROMEDRIVER_VERSION=$(cat chromedriver_version.txt)
-            wget https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip
-            unzip chromedriver_linux64.zip
-            sudo mv chromedriver /usr/local/bin/
-            sudo chmod +x /usr/local/bin/chromedriver
+            # Install WebDriver Manager (gère automatiquement ChromeDriver)
+            pip install webdriver-manager
+            
+            # Alternative: Si vous voulez installer ChromeDriver manuellement
+            # wget https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_MAJOR_VERSION -O chromedriver_version.txt
+            # CHROMEDRIVER_VERSION=$(cat chromedriver_version.txt)
+            # wget https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip
+            # unzip chromedriver_linux64.zip
+            # sudo mv chromedriver /usr/local/bin/
+            # sudo chmod +x /usr/local/bin/chromedriver
 
     - name:  Run unit tests
       run: pytest test-model.py
