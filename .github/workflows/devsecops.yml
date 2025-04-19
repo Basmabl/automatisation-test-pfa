@@ -30,12 +30,12 @@ jobs:
 
     - name: 🦊 Install geckodriver
       run: |
-            # Récupérer la dernière version de geckodriver
-            GECKODRIVER_VERSION=$(curl -sSL https://github.com/mozilla/geckodriver/releases/latest | grep -oP 'v\K[0-9.]+')
+            # Forcer l'utilisation de la version 0.36.0
+            GECKODRIVER_VERSION="v0.36.0"
             echo "Installing geckodriver version $GECKODRIVER_VERSION"
             
-            # Télécharger geckodriver
-            curl -sSL https://github.com/mozilla/geckodriver/releases/download/v$GECKODRIVER_VERSION/geckodriver-v$GECKODRIVER_VERSION-linux64.tar.gz -o geckodriver.tar.gz || { echo "Failed to download geckodriver"; exit 1; }
+            # Télécharger geckodriver avec l'URL correcte
+            curl -sSL https://github.com/mozilla/geckodriver/releases/download/$GECKODRIVER_VERSION/geckodriver-$GECKODRIVER_VERSION-linux64.tar.gz -o geckodriver.tar.gz || { echo "Failed to download geckodriver"; exit 1; }
             
             # Extraire le fichier tar
             tar -xvzf geckodriver.tar.gz || { echo "Failed to extract geckodriver"; exit 1; }
