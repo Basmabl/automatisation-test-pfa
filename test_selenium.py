@@ -6,8 +6,7 @@ import time
 
 # Spécifie le chemin vers geckodriver (en utilisant la classe Service)
 
-
-service = Service('C:/geckodriver-v0.36.0-win64/geckodriver.exe')  # Modifie le chemin ici si nécessaire
+service = Service('/usr/local/bin/geckodriver')
 driver = webdriver.Firefox(service=service)
 
 def test_formulaire():
