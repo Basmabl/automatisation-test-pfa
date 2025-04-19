@@ -28,33 +28,20 @@ jobs:
           pip freeze         # Affiche les dépendances installées
       
 
-    - name: 🦊 Install geckodriver
+    - name: 🧩 Install Google Chrome
       run: |
-            # Forcer l'utilisation de la version 0.36.0
-            GECKODRIVER_VERSION="v0.36.0"
-            echo "Installing geckodriver version $GECKODRIVER_VERSION"
-            
-            # Télécharger geckodriver avec l'URL correcte
-            curl -sSL https://github.com/mozilla/geckodriver/releases/download/$GECKODRIVER_VERSION/geckodriver-$GECKODRIVER_VERSION-linux64.tar.gz -o geckodriver.tar.gz || { echo "Failed to download geckodriver"; exit 1; }
-            
-            # Extraire le fichier tar
-            tar -xvzf geckodriver.tar.gz || { echo "Failed to extract geckodriver"; exit 1; }
-            
-            # Déplacer geckodriver vers /usr/local/bin/
-            sudo mv geckodriver /usr/local/bin/ || { echo "Failed to move geckodriver"; exit 1; }
-            
-            # Nettoyer le fichier tar
-            rm geckodriver.tar.gz || { echo "Failed to remove geckodriver.tar.gz"; exit 1; }
+            sudo apt-get update
+            sudo apt-get install -y google-chrome-stable
+    
+    - name: 🧪 Install ChromeDriver
+      run: |
+            sudo apt-get install -y chromium-chromedriver
+            sudo ln -s /usr/lib/chromium-browser/chromedriver /usr/bin/chromedriver
+    
         
-
     - name: Vérifier geckodriver
       run: |
              geckodriver --version
-
-    - name: Installer Firefox
-      run: |
-            sudo apt-get update
-            sudo apt-get install -y firefox
 
     - name:  Run unit tests
       run: pytest test-model.py

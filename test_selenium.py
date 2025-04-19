@@ -1,20 +1,23 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.firefox.service import Service
+from selenium.webdriver.common.keys import Keys
 import time
 
-# Utilise le chemin Linux de geckodriver
-service = Service('/usr/local/bin/geckodriver')
-options = webdriver.FirefoxOptions()
-options.add_argument('--headless')  # important pour que ça tourne sans interface graphique
+def test_homepage_title():
+    # ⚙️ Configurer les options Chrome pour l'environnement CI (Linux sans GUI)
+    options = webdriver.ChromeOptions()
+    options.add_argument("--headless")  # Mode sans interface
+    options.add_argument("--no-sandbox")
+    options.add_argument("--disable-dev-shm-usage")
 
-driver = webdriver.Firefox(service=service, options=options)
+    # 🚀 Lancer le navigateur Chrome
+    driver = webdriver.Chrome(options=options)
 
-# Ton test (à adapter selon ton app)
-driver.get("http://localhost:5000")  # Ou une URL selon ton app
+    # 🌐 Accéder à une page (ex: http://localhost:5000 si tu lances un app Flask)
+    driver.get("http://127.0.0.1:5000")  # Change cette URL selon ton besoin
 
-time.sleep(2)  # attend que la page charge
+    # ✅ Faire une vérification
+    assert "Example Domain" in driver.title
 
-assert "Visiteurs" in driver.page_source  # exemple d’assertion
-
-driver.quit()
+    # 🧹 Fermer le navigateur
+    driver.quit()
