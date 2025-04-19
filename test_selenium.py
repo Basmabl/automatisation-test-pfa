@@ -3,10 +3,21 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.firefox.service import Service
 import time
+import sys
+
 
 # Spécifie le chemin vers geckodriver (en utilisant la classe Service)
 
-service = Service('/usr/local/bin/geckodriver')
+
+# Détecter le système d'exploitation
+if sys.platform == "win32":
+    geckodriver_path = "C:/geckodriver-v0.36.0-win64/geckodriver.exe"
+else:
+    # Assure-toi d'avoir installé geckodriver sur ton système Linux et spécifie le chemin approprié
+    geckodriver_path = "/usr/local/bin/geckodriver"  # Chemin pour Linux
+
+# Spécifie le chemin vers geckodriver en utilisant la classe Service
+service = Service(geckodriver_path)
 driver = webdriver.Firefox(service=service)
 
 def test_formulaire():
