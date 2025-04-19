@@ -46,7 +46,15 @@ jobs:
             # Nettoyer le fichier tar
             rm geckodriver.tar.gz || { echo "Failed to remove geckodriver.tar.gz"; exit 1; }
         
-      
+
+    - name: Vérifier geckodriver
+      run: |
+             geckodriver --version
+
+    - name: Installer Firefox
+      run: |
+            sudo apt-get update
+            sudo apt-get install -y firefox
 
     - name:  Run unit tests
       run: pytest test-model.py
