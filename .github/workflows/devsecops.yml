@@ -24,7 +24,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install pytest selenium
-          python --version  # Affiche la version de Python
+          python --version  # Affiche la version de Python5587
           pip freeze         # Affiche les dépendances installées
       
 
