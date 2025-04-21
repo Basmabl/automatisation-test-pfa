@@ -81,4 +81,4 @@ jobs:
         projectBaseDir: .
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        SONAR_HOST_URL: http://localhost:8080  # À adapter si SonarQube est hébergé ailleurs
+        SONAR_HOST_URL: nifty_feynman:8080  # À adapter si SonarQube est hébergé ailleurs
