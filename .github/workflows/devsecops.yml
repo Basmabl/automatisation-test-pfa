@@ -53,7 +53,7 @@ jobs:
       uses: SonarSource/sonarcloud-github-action@v2
       with:
         args: >
-          -Dsonar.projectKey=Basmabl:automatisation-test-pfa
+          -Dsonar.projectKey=Basmabl_automatisation-test-pfa 
 
           -Dsonar.organization=Basmabl
       env:
