@@ -49,12 +49,14 @@ jobs:
         exit-code: '0'
         ignore-unfixed: true
 
-    - name: SonarCloud analysis
-      uses: SonarSource/sonarcloud-github-action@v2
+        
+    - name: SonarQube
+      uses: actions/checkout@v4
       with:
-        args: >
-          -Dsonar.projectKey=Basmabl_automatisation-test-pfa 
-
-          -Dsonar.organization=Basmabl
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+    - name: SonarQube Scan
+      uses: SonarSource/sonarqube-scan-action@v5
       env:
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+    
+        
