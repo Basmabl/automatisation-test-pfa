@@ -9,68 +9,39 @@ on:
 jobs:
   devsecops-pipeline:
     runs-on: ubuntu-latest
-    env:
-          SONAR_HOST_URL: http://localhost:9000/  # Ou votre URL serveur
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
     steps:
-    - name:  Checkout code
+    - name: Checkout code
       uses: actions/checkout@v3
 
-    - name:  Set up Python
+    - name: Set up Python
       uses: actions/setup-python@v4
       with:
         python-version: '3.10'
 
-    - name:  Install dependencies
+    - name: Install dependencies
       run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install pytest selenium
-          python --version  # Affiche la version de Python5587
-          pip freeze         # Affiche les dépendances installées
-      
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        python --version
+        pip freeze
 
-    - name: 🧪 Install Chrome and ChromeDriver (Compatible Versions)
-      run: |
-            sudo apt update
-            sudo apt install -y wget unzip xvfb
-            
-            # Install Chrome
-            wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-            sudo apt install -y ./google-chrome-stable_current_amd64.deb
-            
-            # Get Chrome major version (e.g. "135" from "135.0.7049.95")
-            CHROME_MAJOR_VERSION=$(google-chrome --version | awk '{print $3}' | cut -d'.' -f1)
-            
-            # Install WebDriver Manager (gère automatiquement ChromeDriver)
-            pip install webdriver-manager
-            
-            # Alternative: Si vous voulez installer ChromeDriver manuellement
-            # wget https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_MAJOR_VERSION -O chromedriver_version.txt
-            # CHROMEDRIVER_VERSION=$(cat chromedriver_version.txt)
-            # wget https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip
-            # unzip chromedriver_linux64.zip
-            # sudo mv chromedriver /usr/local/bin/
-            # sudo chmod +x /usr/local/bin/chromedriver
-
-    - name:  Run unit tests
+    - name: Run unit tests
       run: pytest test-model.py
 
-
-    - name:  Build Docker image
+    - name: Build Docker image
       run: docker build -t basmaboulli/unitest-basma:latest .
 
-    - name:  Login to Docker Hub
+    - name: Login to Docker Hub
       uses: docker/login-action@v2
       with:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
 
-    - name:  Push Docker image to Docker Hub
+    - name: Push Docker image to Docker Hub
       run: docker push basmaboulli/unitest-basma:latest
 
-    - name:  Scan image with Trivy
+    - name: Scan image with Trivy
       uses: aquasecurity/trivy-action@master
       with:
         image-ref: basmaboulli/unitest-basma:latest
@@ -78,10 +49,12 @@ jobs:
         exit-code: '0'
         ignore-unfixed: true
 
-    - name:  SonarQube Analysis
-      uses: sonarsource/sonarqube-scan-action@master
+    - name: SonarCloud analysis
+      uses: SonarSource/sonarcloud-github-action@v2
       with:
-        projectBaseDir: .
+        args: >
+          -Dsonar.projectKey=Basmabl:automatisation-test-pfa
+
+          -Dsonar.organization=Basmabl
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        SONAR_HOST_URL: nifty_feynman:8080  # À adapter si SonarQube est hébergé ailleurs
