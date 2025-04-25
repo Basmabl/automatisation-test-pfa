@@ -49,20 +49,35 @@ jobs:
         exit-code: '0'
         ignore-unfixed: true
 
-    - name: Cache SonarQube Scanner
-      uses: actions/cache@v4
-      with:
+        jobs:
+  sonarcloud:
+    name: Run SonarCloud Analysis
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v3
+        with:
           path: ~/.sonar/cache
-          key: sonar-scanner-cli-${{ runner.os }}-${{ hashFiles('**/sonar-scanner-cli*') }}
-    
-      
-    - name: SonarQube
-      uses: actions/checkout@v4
-      with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-    - name: SonarQube Scan
-      uses: SonarSource/sonarqube-scan-action@v6
-      env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+
+      - name: Run SonarCloud scan
+        uses: SonarSource/sonarcloud-github-action@v2
+        with:
+          args: >
+            -Dsonar.projectKey=Basmabl_automatisation-test-pfa
+            -Dsonar.organization=basmabl
+            -Dsonar.token=${{ secrets.SONAR_TOKEN }}
+
     
         
