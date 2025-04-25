@@ -23,11 +23,11 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install -r requirements.txt
-        pip install pytest-cov  # Installer pytest-cov pour la couverture
+        python --version
+        pip freeze
 
-    - name: Run unit tests and generate coverage report
-      run: |
-        pytest --cov=./ --cov-report=xml > coverage.xml  # Générer un rapport XML de la couverture
+    - name: Run unit tests
+      run: pytest test-model.py
 
     - name: Build Docker image
       run: docker build -t basmaboulli/unitest-basma:latest .
@@ -49,11 +49,20 @@ jobs:
         exit-code: '0'
         ignore-unfixed: true
 
-    - name: Run SonarCloud scan
-      uses: SonarSource/sonarcloud-github-action@v2
-      with:
-        args: >
-          -Dsonar.projectKey=Basmabl_automatisation-test-pfa
-          -Dsonar.organization=basmabl
-          -Dsonar.token=${{ secrets.SONAR_TOKEN }}
-          -Dsonar.python.coverage.reportPaths=coverage.xml  # Spécifier le chemin du rapport de couverture
+        jobs:
+  sonarcloud:
+    name: SonarCloud Analysis
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@v2
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >
+            -Dsonar.projectKey=Basmabl_automatisation-test-pfa
+            -Dsonar.organization=basmabl
+            -Dsonar.host.url=https://sonarcloud.io
