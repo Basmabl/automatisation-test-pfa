@@ -49,23 +49,32 @@ jobs:
         exit-code: '0'
         ignore-unfixed: true
 
+       
         jobs:
   sonarcloud:
-    name: SonarCloud Analysis
+    name: Analyze with SonarCloud
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+    - uses: actions/checkout@v4
 
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        with:
-          args: >
-            -Dsonar.projectKey=Basmabl_automatisation-test-pfa
-            -Dsonar.organization=basmabl
-            -Dsonar.python.coverage.reportPaths=coverage.xml
-            -Dsonar.host.url=https://sonarcloud.io
-            -Dsonar.python.version=3.13
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.13'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pytest pytest-cov
+
+    - name: Run tests and generate coverage report
+      run: |
+        pytest --cov=. --cov-report=xml
+
+    - name: SonarCloud Scan
+      uses: SonarSource/sonarcloud-github-action@v2
+      with:
+        args: >
+          -Dsonar.token=${{ secrets.SONAR_TOKEN }}
