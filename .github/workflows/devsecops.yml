@@ -65,5 +65,6 @@ jobs:
           args: >
             -Dsonar.projectKey=Basmabl_automatisation-test-pfa
             -Dsonar.organization=basmabl
+            -Dsonar.python.coverage.reportPaths=coverage.xml
             -Dsonar.host.url=https://sonarcloud.io
             -Dsonar.python.version=3.13
