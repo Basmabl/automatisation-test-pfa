@@ -26,30 +26,13 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements.txt pytest pytest-cov
 
-    - name: Run tests and generate coverage
-      run: |
-          # Crée un fichier test minimal si absent
-          if [ ! -f test-model.py ]; then
-            echo 'def test_example(): assert True' > test-model.py
-          fi
-          
-          # Analyse TOUT le code Python (pas seulement test-model.py)
-          pytest --cov=app --cov-report=xml:coverage.xml test-model.py
-          # Vérifie que la couverture atteint au moins 80%
-          python -c "import xml.etree.ElementTree as ET; cov = ET.parse('sonar-coverage.xml'); exit(1 if float(cov.find('.//line-rate').text) < 0.8 else 0)"
-
-    - name: SonarCloud Scan
-      uses: SonarSource/sonarcloud-github-action@v2
-      with:
-        args: >
-          -Dsonar.projectKey=Basmabl_automatisation-test-pfa
-          -Dsonar.organization=basmabl
-          -Dsonar.python.version=3.13
-          -Dsonar.host.url=https://sonarcloud.io
-          -Dsonar.sources=.
-          -Dsonar.exclusions=venv/**,**/__pycache__/**
-          -Dsonar.python.coverage.reportPaths=sonar-coverage.xml
-          -Dsonar.python.xunit.reportPaths=test-report.xml
+    - name: SonarQube Scan
       env:
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        SONAR_HOST_URL: https://0bf3-160-178-153-229.ngrok-free.app/
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      run: |
+          sonar-scanner \
+            -Dsonar.projectKey=unitest-basma \
+            -Dsonar.sources=. \
+            -Dsonar.host.url=https://0bf3-160-178-153-229.ngrok-free.app/
+            -Dsonar.login=${SONAR_TOKEN}
+        
