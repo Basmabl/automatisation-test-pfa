@@ -25,7 +25,7 @@ jobs:
         pip install -r requirements.txt
         python --version
         pip install pytest pytest-cov
-        pip freeze
+      
 
     - name: Run unit tests
       run: pytest test-model.py
