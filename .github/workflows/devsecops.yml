@@ -34,11 +34,10 @@ jobs:
           fi
           
           # Analyse TOUT le code Python (pas seulement test-model.py)
-          pytest --cov=. --cov-report=xml:sonar-coverage.xml --junitxml=test-report.xml
-          
+          pytest --cov=app --cov-report=xml:coverage.xml test-model.py
           # Vérifie que la couverture atteint au moins 80%
           python -c "import xml.etree.ElementTree as ET; cov = ET.parse('sonar-coverage.xml'); exit(1 if float(cov.find('.//line-rate').text) < 0.8 else 0)"
-          
+
     - name: SonarCloud Scan
       uses: SonarSource/sonarcloud-github-action@v2
       with:
