@@ -27,12 +27,9 @@ jobs:
         pip install pytest pytest-cov
       
 
-    - name: Run unit tests
-      run: pytest test-model.py
-    - name: Run tests and generate coverage report
-      run: |
-         pytest --cov=app --cov-report=xml test-model.py
-
+    - name: Run tests and generate coverage
+      run: pytest --cov=app --cov-report=xml test-model.py
+      
 
     - name: Build Docker image
       run: docker build -t basmaboulli/unitest-basma:latest .
