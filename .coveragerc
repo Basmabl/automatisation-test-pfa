@@ -1,0 +1,8 @@
+[run]
+source = app              # Dossier à analyser
+omit = */__init__.py      # Fichiers à ignorer
+
+[report]
+exclude_lines =
+    pragma: no cover      # Ignore les lignes marquées
+    def __repr__          # Ignore les méthodes spéciales
