@@ -52,3 +52,4 @@ jobs:
           -Dsonar.python.xunit.reportPaths=test-report.xml
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        SONAR_HOST_URL: https://0bf3-160-178-153-229.ngrok-free.app/
