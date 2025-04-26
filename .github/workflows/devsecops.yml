@@ -7,45 +7,51 @@ on:
     branches: [ main ]
 
 jobs:
-  sonarqube:
-    name: SonarQube Scan
+  devsecops-pipeline:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+    - name: Checkout code
+      uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.13'
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.13'
 
-      - name:  Run unit tests
-        run: pytest test-model.py   
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        python --version
+        pip freeze
+
+    - name:  Run unit tests
+      run: pytest test-model.py   
         
         
-      - name:  Build Docker image
-        run: docker build -t basmaboulli/unitest-basma:latest .
+    - name:  Build Docker image
+      run: docker build -t basmaboulli/unitest-basma:latest .
 
-      - name:  Login to Docker Hub
-        uses: docker/login-action@v2
-        with:
+    - name:  Login to Docker Hub
+      uses: docker/login-action@v2
+      with:
          username: ${{ secrets.DOCKER_USERNAME }}
          password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name:  Push Docker image to Docker Hub
-        run: docker push basmaboulli/unitest-basma:latest
+    - name:  Push Docker image to Docker Hub
+      run: docker push basmaboulli/unitest-basma:latest
 
-      - name:  Scan image with Trivy
-        uses: aquasecurity/trivy-action@master
-        with:
+    - name:  Scan image with Trivy
+      uses: aquasecurity/trivy-action@master
+      with:
          image-ref: basmaboulli/unitest-basma:latest
          format: 'table'
          exit-code: '0'
          ignore-unfixed: true
 
-      - name: Install sonar-scanner
-        run: |
+    - name: Install sonar-scanner
+      run: |
           sudo apt-get update
           sudo apt-get install -y openjdk-17-jdk
           curl -o sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-linux.zip
@@ -53,10 +59,10 @@ jobs:
           export PATH=$PATH:$(pwd)/sonar-scanner-5.0.1.3006-linux/bin
           echo "$(pwd)/sonar-scanner-5.0.1.3006-linux/bin" >> $GITHUB_PATH
 
-      - name: Run SonarQube scan
-        env:
+    - name: Run SonarQube scan
+      env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: |
+      run: |
           sonar-scanner \
             -Dsonar.projectKey=unitest-basma \
             -Dsonar.sources=. \
