@@ -18,3 +18,16 @@ def test_home_route_post():
     response = tester.post('/', data={'month': '5'})
     assert response.status_code == 200
     assert b"Predicted visitors:" in response.data  # Le texte que tu affiches après prédiction
+
+
+def test_home_route_get():
+    tester = app.test_client()
+    response = tester.get('/')
+    assert response.status_code == 200
+    assert b"Prediction" in response.data  # Vérifie que le mot Prediction est dans le HTML
+
+def test_home_route_post():
+    tester = app.test_client()
+    response = tester.post('/', data={'month': '5'})
+    assert response.status_code == 200
+    assert b"Predicted visitors:" in response.data  # Le texte que tu affiches après prédiction
