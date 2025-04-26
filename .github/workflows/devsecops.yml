@@ -36,5 +36,5 @@ jobs:
           sonar-scanner \
             -Dsonar.projectKey=unitest-basma \
             -Dsonar.sources=. \
-            -Dsonar.host.url=https://0bf3-160-178-153-229.ngrok-free.app 
+            -Dsonar.host.url=https://0bf3-160-178-153-229.ngrok-free.app \
             -Dsonar.login=$SONAR_TOKEN
