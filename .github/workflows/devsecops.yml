@@ -60,6 +60,7 @@ jobs:
     - name: SonarCloud Scan
       uses: SonarSource/sonarcloud-github-action@v2
       with:
+        sonar-token: ${{ secrets.SONAR_TOKEN }}
         args: >
           -Dsonar.projectKey=Basmabl_automatisation-test-pfa
             -Dsonar.organization=basmabl
