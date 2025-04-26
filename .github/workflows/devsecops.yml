@@ -7,32 +7,34 @@ on:
     branches: [ main ]
 
 jobs:
-  devsecops-pipeline:
+  sonarqube:
+    name: SonarQube Scan
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-      with:
-        fetch-depth: 0  # Désactive le shallow clone pour le blame Git
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.13'
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt pytest pytest-cov
+      - name: Install sonar-scanner
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y openjdk-17-jdk
+          curl -o sonar-scanner.zip https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-5.0.1.3006-linux.zip
+          unzip sonar-scanner.zip
+          export PATH=$PATH:$(pwd)/sonar-scanner-5.0.1.3006-linux/bin
+          echo "$(pwd)/sonar-scanner-5.0.1.3006-linux/bin" >> $GITHUB_PATH
 
-    - name: SonarQube Scan
-      env:
+      - name: Run SonarQube scan
+        env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      run: |
+        run: |
           sonar-scanner \
             -Dsonar.projectKey=unitest-basma \
             -Dsonar.sources=. \
-            -Dsonar.host.url=https://0bf3-160-178-153-229.ngrok-free.app/
-            -Dsonar.login=${SONAR_TOKEN}
-        
+            -Dsonar.host.url=https://0bf3-160-178-153-229.ngrok-free.app 
+            -Dsonar.login=$SONAR_TOKEN
