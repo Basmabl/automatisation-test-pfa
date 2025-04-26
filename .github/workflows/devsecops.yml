@@ -55,16 +55,14 @@ jobs:
         ignore-unfixed: true
 
        
-        jobs: 
-        sonarcloud:
     - name: SonarCloud Scan
       uses: SonarSource/sonarcloud-github-action@v2
       with:
-        sonar-token: ${{ secrets.SONAR_TOKEN }}
-        args: >
-          -Dsonar.projectKey=Basmabl_automatisation-test-pfa
+          args: >
+            -Dsonar.projectKey=Basmabl_automatisation-test-pfa
             -Dsonar.organization=basmabl
             -Dsonar.python.version=3.13
             -Dsonar.host.url=https://sonarcloud.io
-            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
             -Dsonar.coverageReportPaths=coverage.xml
+      env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }} 
